@@ -1,0 +1,101 @@
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+import math
+
+import pandas as pd
+
+import random
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import rcParams
+rcParams['font.family'] = 'simhei'
+######################
+
+data= pd.read_excel("E:\\派能\\电力市场\\Installed_2020_2022.xlsx",sheet_name='Installed generation capacity',header=None)
+data
+
+data2=pd.read_excel("D:\\Downloads\\Installierte_Erzeugungsleistung_201901010000_201912312359.xlsx",header=None)
+data2=data2.dropna()
+data2.T
+
+##########################
+画图
+
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif']=['SimHei']#设置字体以便支持中文
+import numpy as np
+
+plt.figure(figsize=(15, 8))
+params = {'legend.fontsize': 15,
+          'legend.handlelength': 8 }
+plt.rcParams.update(params)
+
+x=data.T.loc[2:13,0]
+
+y1=data.T.loc[2:13,1]/1000
+y2=data.T.loc[2:13,2]/1000
+y3=data.T.loc[2:13,3]/1000
+
+y4=data2.T.loc[2:13,7]/1000
+
+x=np.arange(12)#柱状图在横坐标上的位置
+#列出你要显示的数据，数据的列表长度与x长度相同
+
+bar_width=0.2#设置柱状图的宽度
+tick_label=['生物质能','水力','海上风能','陆地风能','光伏','其他新能源','核能','褐煤','硬煤','天然气','水力蓄能','其它传统能源']
+
+#绘制并列柱状图
+plt.bar(x,y4,bar_width,color='Khaki',label='2019')
+
+plt.bar(x+bar_width,y1,bar_width,color='salmon',label='2020')
+plt.bar(x+2*bar_width,y2,bar_width,color='orchid',label='2021')
+plt.bar(x+3*bar_width,y3,bar_width,color='c',label='2022')
+
+plt.grid(b = "True",axis = "y")
+plt.legend(loc=2)#显示图例，即label
+plt.xticks(x+3*bar_width/3,'',rotation=30,fontsize=10)#显示x坐标轴的标签,即tick_label,调整位置，使其落在两个直方图中间位置
+plt.yticks(range(0,70,10))
+
+for a,b in zip(x,y4):
+    plt.text(a,b,b, ha='center', va= 'bottom',fontsize=9,color="k")
+    
+for a,b in zip(x+2*bar_width,y1):
+    plt.text(a,b,b, ha='center', va= 'bottom',fontsize=9,color="k")
+    
+for a,b in zip(x+3*bar_width,y2):
+    plt.text(a,b,b, ha='center', va= 'bottom',fontsize=9,color="orchid")
+    
+for a,b in zip(x+4*bar_width,y3):
+    plt.text(a,b,b, ha='center', va= 'bottom',fontsize=9,color="c")
+    
+plt.ylabel("装机量（GW）",fontsize=20)
+plt.xlabel("",fontsize=20)
+
+#将y变成列表
+t=y4.values.tolist()
+q=y1.values.tolist()
+w=y2.values.tolist()
+e=y3.values.tolist()
+
+zipp=zip(t,q,w,e)
+zipp=list(zipp)
+
+#绘制表格
+rowLabels = ['2019','2020','2021','2022'] # 表格行名
+
+
+cellText = [t,q,w,e] #表格每一行数据
+table = plt.table(cellText=cellText, rowLabels=rowLabels,colLabels=tick_label, loc='bottom', cellLoc='center',rowLoc='center')
+table.auto_set_font_size(False)
+table.set_fontsize(10) #字体大小
+table.scale(1, 1.5) #表格缩放
+plt.grid(b = "True",linestyle='dashed', linewidth=1)
+
+plt.title("2019-2022年德国各资源装机量",fontsize='xx-large',fontweight='heavy')
+
+plt.savefig('装机量.png', dpi=300, bbox_inches = 'tight')
+
