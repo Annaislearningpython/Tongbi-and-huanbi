@@ -1,0 +1,45 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+rcParams['font.family'] = 'simhei'
+data = pd.read_excel("E:\\派能\\电力市场\\DE.xlsx")
+
+data2= pd.read_excel("E:\\派能\\电力市场\\Installed_2020_2022.xlsx",sheet_name='Installed generation capacity',header=None)
+data2.T
+
+########################################
+
+import pylab as plot
+params = {'legend.fontsize': 10,      ###调节legend框架大小
+          'legend.handlelength': 4 }
+plot.rcParams.update(params) 
+data = pd.read_excel("E:\\派能\\电力市场\\DE.xlsx")
+data
+################################## 画图
+x=data.loc[9:17,'year']
+y=data.loc[9:17,'Wind']
+
+y1=data.loc[9:17,'Solar(TWh)']
+
+z1=data2.loc[9:17,1]
+z2=data2.loc[9:17,2]
+
+plt.figure(figsize=(10,6))
+
+
+plt.bar(x,z1,color="c",width=0.35,label="")
+plt.bar(x+0.35,z2,color="b",width=0.35,label="")
+
+
+plt.twinx()
+#绘制次坐标轴的图表
+plt.bar(x,z1,color="b",width = 0.35,label="装机量MW")
+
+plt.bar(x+0.35,z2,color="r",width = 0.35,label="装机量MW")
+#设置次 x 轴和 y 轴的名称
+plt.xlabel('')
+plt.ylabel('激活率')
+plt.xticks(x,fontsize=20)
+plt.yticks(fontsize=20)
+#设置次坐标轴图表的图例
+plt.legend()
