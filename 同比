@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import rcParams
+rcParams['font.family'] = 'simhei'
+
+data2= pd.read_excel("C:\\Users\\Anna\\Desktop\\商业数据分析\\data.xlsx",sheet_name='Sheet2')
+data2
+
+
+data2['solar同比'] = data2['solar'].pct_change()#同比增长
+data2.fillna(0,inplace=True)
+data2['wind同比'] = data2['wind'].pct_change()
+data2.fillna(0,inplace=True)
+
+
+data2['solar同比'] = data2['solar同比'] .apply(lambda x:str(round(x * 100,2)) + '%').str.replace('nan%','')#百分号
+data2['wind同比'] = data2['wind同比'] .apply(lambda x:str(round(x * 100,2)) + '%').str.replace('nan%','')
+data2
+
+
+x=data2.loc[9:17,'year']
+y=data2.loc[9:17,'solar']
+
+y1=data2.loc[9:17,'solar同比']
+
+plt.figure(figsize=(10,6))
+plt.xlabel("年份",fontsize=20)
+plt.ylabel("装机量MW",fontsize=20)
+
+plt.bar(x,y,color="c",width=0.35,label="")
+
+plt.twinx()
+
+
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+
+plt.bar(x,y1)
+
+#data['nian'] = data.solar.diff() 另外一种计算同比
+#data.fillna(0,inplace=True)
+#data['tongbi'] = data['nian']/(data['solar'] - data['nian'])
+#data['tongbi'] = data['tongbi'].apply(lambda x:str(round(x * 100,2)) + '%').str.replace('nan%','')
